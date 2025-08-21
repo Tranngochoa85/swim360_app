@@ -15,13 +15,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   Future<void> _login() async {
+    // Lưu lại context một cách an toàn
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
     final email = _emailController.text;
     final password = _passwordController.text;
     final url = Uri.parse('http://10.0.2.2:8000/auth/login');
-
-    // Lưu lại context một cách an toàn trước khi gọi await
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
 
     try {
       final response = await http.post(
@@ -31,10 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.statusCode == 200) {
-        // final responseData = json.decode(response.body);
-        // final token = responseData['access_token'];
-        // Tạm thời chưa dùng token
-
         navigator.pushReplacement(
           MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
