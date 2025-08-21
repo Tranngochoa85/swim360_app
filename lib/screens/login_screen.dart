@@ -10,7 +10,6 @@ class HomeScreen extends StatelessWidget {
     return const Scaffold(body: Center(child: Text("Home Screen")));
   }
 }
-}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
