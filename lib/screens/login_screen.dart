@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:swim360_app/screens/coach_profile_screen.dart';
+import 'package:swim360_app/screens/home_screen.dart'; // Đã dùng lại
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
     final url = Uri.parse('http://10.0.2.2:8000/auth/login');
 
-    // Lưu lại context trước khi gọi await
+    // Lưu lại context một cách an toàn trước khi gọi await
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
@@ -31,9 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.statusCode == 200) {
-        // Chuyển hướng đến trang Coach Profile để test
+        // final responseData = json.decode(response.body);
+        // final token = responseData['access_token'];
+        // Tạm thời chưa dùng token
+
         navigator.pushReplacement(
-          MaterialPageRoute(builder: (context) => const CoachProfileScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       } else {
         scaffoldMessenger.showSnackBar(
@@ -54,8 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-    @override
-    Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     // ... (Phần UI giữ nguyên, không cần thay đổi)
     return Scaffold(
       body: SafeArea(
