@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swim360_app/screens/login_screen.dart'; // Import màn hình mới
 
 void main() {
   runApp(const MyApp());
@@ -10,18 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Tắt banner "Debug"
       debugShowCheckedModeBanner: false,
       title: 'Swim360',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Welcome to Swim360!'),
-        ),
-      ),
+      // Đặt LoginScreen làm màn hình chính
+      home: const LoginScreen(),
     );
   }
 }
