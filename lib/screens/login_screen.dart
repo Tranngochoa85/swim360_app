@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:swim360_app/screens/home_screen.dart';
+// Dòng 'dart:convert' đã được xóa
+
+// Giả sử đây là màn hình tiếp theo sau khi login thành công
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: Center(child: Text("Home Screen")));
+  }
+}
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,13 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   Future<void> _login() async {
-    // Lưu lại context một cách an toàn
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
-
     final email = _emailController.text;
     final password = _passwordController.text;
     final url = Uri.parse('http://10.0.2.2:8000/auth/login');
+
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
 
     try {
       final response = await http.post(
@@ -55,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ... (Phần UI giữ nguyên, không cần thay đổi)
     return Scaffold(
       body: SafeArea(
         child: Center(
