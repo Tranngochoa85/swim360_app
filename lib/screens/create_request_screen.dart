@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// Để test, chúng ta cần token của một người học (LEARNER)
-// Bạn hãy dùng Postman đăng nhập với tài khoản learner và dán token vào đây
-const String FAKE_LEARNER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0bGVhcm5AZXhhbXBsZS5jb20iLCJleHAiOjE3NTU3NjY4ODF9.xFvL5BkRJNwqYwRbC9Gng9eo266OMFYf1A5LymRmxLQ";
+// Đổi tên hằng số theo quy tắc lowerCamelCase
+const String fakeLearnerToken = "YOUR_LEARNER_ACCESS_TOKEN";
 
 class CreateRequestScreen extends StatefulWidget {
   const CreateRequestScreen({super.key});
@@ -15,52 +14,52 @@ class CreateRequestScreen extends StatefulWidget {
 
 class _CreateRequestScreenState extends State<CreateRequestScreen> {
   final _formKey = GlobalKey<FormState>();
-  // Giả sử chúng ta đã có ID của HLV và Hồ bơi để tạo yêu cầu
-  // Sau này, người dùng sẽ chọn từ danh sách
-  final int _selectedCoachId = 8; // ID của HLV bạn đã tạo
-  final int _selectedPoolId = 1; // ID của Hồ bơi bạn đã tạo
+  final int _selectedCoachId = 8;
+  final int _selectedPoolId = 1;
 
   Future<void> _submitRequest() async {
-    if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('http://10.0.2.2:8000/bookings/');
-      final headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $FAKE_LEARNER_TOKEN',
-      };
-      final body = json.encode({
-        'pool_id': _selectedPoolId,
-        'coach_id': _selectedCoachId,
-      });
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    // Lưu lại context một cách an toàn
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
 
-      try {
-        final response = await http.post(url, headers: headers, body: body);
+    final url = Uri.parse('http://10.0.2.2:8000/bookings/');
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $fakeLearnerToken',
+    };
+    final body = json.encode({
+      'pool_id': _selectedPoolId,
+      'coach_id': _selectedCoachId,
+    });
 
-        if (response.statusCode == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Gửi yêu cầu thành công!')),
-          );
-          Navigator.of(context).pop(); // Quay lại trang trước
-        } else {
-          print('Failed to create request: ${response.body}');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Lỗi: ${response.statusCode}')),
-          );
-        }
-      } catch (e) {
-        print('Connection error: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Lỗi kết nối server.')),
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('Gửi yêu cầu thành công!')),
+        );
+        navigator.pop(); // Quay lại trang trước
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Lỗi: ${response.statusCode}')),
         );
       }
+    } catch (e) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Lỗi kết nối server.')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // ... (Phần UI giữ nguyên, không cần thay đổi) ...
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tạo Yêu cầu Khóa học'),
-      ),
+      appBar: AppBar(title: const Text('Tạo Yêu cầu Khóa học')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -68,25 +67,17 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Các trường thông tin tĩnh để minh họa
               Text('Gửi yêu cầu đến HLV ID: $_selectedCoachId'),
               Text('Tại Hồ bơi ID: $_selectedPoolId'),
               const SizedBox(height: 16),
-
               TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Ghi chú thêm (ví dụ: trình độ, mục tiêu...)',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(hintText: 'Ghi chú thêm (ví dụ: trình độ, mục tiêu...)', border: OutlineInputBorder()),
                 maxLines: 4,
               ),
               const SizedBox(height: 30),
-
               ElevatedButton(
                 onPressed: _submitRequest,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0)
-                ),
+                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16.0)),
                 child: const Text('GỬI YÊU CẦU KHÓA HỌC'),
               ),
             ],
