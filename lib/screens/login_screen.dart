@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:swim360_app/screens/coach_profile_screen.dart'; // Đã dùng lại
+import 'package:swim360_app/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // Tạm thời chưa dùng token
 
         navigator.pushReplacement(
-          MaterialPageRoute(builder: (context) => const CoachProfileScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       } else {
         scaffoldMessenger.showSnackBar(
@@ -57,9 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-    @override
-    Widget build(BuildContext context) {
-    // ... (Phần UI giữ nguyên, không cần thay đổi)
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
